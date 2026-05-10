@@ -1,0 +1,11 @@
+framework:
+    asset_mapper:
+        paths:
+            - assets/
+
+when@prod:
+    framework:
+        asset_mapper:
+            exclude_dotfiles: true
+            excluded_patterns:
+                - '*.d.ts'

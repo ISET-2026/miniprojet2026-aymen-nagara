@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <section class="recipehub-form-shell auth-shell">
+        <div class="auth-card">
+            <div class="recipehub-form-header">
+                <span class="recipehub-kicker">RecipeHub</span>
+                <h1>Connexion</h1>
+                <p>Accédez à votre espace recettes.</p>
+            </div>
+
+            {% if error %}
+                <div class="form-alert error">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="recipehub-form">
+                <div class="recipehub-field">
+                    <label for="_username">Email</label>
+                    <input id="_username" name="_username" type="email" value="{{ last_username }}" autocomplete="username" required>
+                </div>
+
+                <div class="recipehub-field">
+                    <label for="_password">Mot de passe</label>
+                    <input id="_password" name="_password" type="password" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button type="submit" class="recipehub-submit">Se connecter</button>
+            </form>
+
+            <p class="recipehub-form-footer">
+                Pas encore de compte ? <a href="{{ path('app_register') }}">Créer un compte</a>
+            </p>
+        </div>
+    </section>
+{% endblock %}

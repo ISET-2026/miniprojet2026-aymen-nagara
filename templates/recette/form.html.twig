@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if edition %}Modifier{% else %}Nouvelle{% endif %} recette{% endblock %}
+
+{% block body %}
+    <section class="recipehub-form-shell recipe-shell">
+        <div class="card border-0 shadow-sm recipehub-form-card recipe-card">
+            <div class="card-body p-4 p-md-5">
+                <div class="mb-4 recipehub-form-header">
+                    <span class="badge text-bg-warning text-dark mb-3 recipehub-kicker">RecipeHub</span>
+                    <h1 class="h3 mb-2">{% if edition %}Modifier la recette{% else %}Nouvelle recette{% endif %}</h1>
+                    <p class="text-muted mb-0">Renseignez les informations principales, puis ajoutez l’image et les tags.</p>
+                </div>
+
+                {{ form_start(form, { attr: { class: 'recipehub-form' } }) }}
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-8 recipehub-field">{{ form_row(form.titre) }}</div>
+                    <div class="col-12 col-lg-4 recipehub-field">{{ form_row(form.categorie) }}</div>
+                    <div class="col-12 recipehub-field">{{ form_row(form.description) }}</div>
+                    <div class="col-12 recipehub-field">{{ form_row(form.instructions) }}</div>
+                    <div class="col-6 col-lg-3 recipehub-field">{{ form_row(form.tempsPreparation) }}</div>
+                    <div class="col-6 col-lg-3 recipehub-field">{{ form_row(form.tempsCuisson) }}</div>
+                    <div class="col-6 col-lg-3 recipehub-field">{{ form_row(form.difficulte) }}</div>
+                    <div class="col-6 col-lg-3 recipehub-field">{{ form_row(form.nbPersonnes) }}</div>
+                    <div class="col-12 recipehub-field">{{ form_row(form.publiee) }}</div>
+                    <div class="col-12 recipehub-field">{{ form_row(form.tags) }}</div>
+                    <div class="col-12 recipehub-field">{{ form_row(form.imageFile) }}</div>
+                </div>
+
+                <div class="mt-4 d-flex flex-column flex-sm-row gap-2">
+                    {{ form_row(form.submit, { label: 'Enregistrer', attr: { class: 'btn btn-primary btn-lg recipehub-submit' } }) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ recette.titre }} — RecipeHub{% endblock %}
+
+{% block body %}
+    <div class="mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('app_recette_index') }}">Recettes</a></li>
+                <li class="breadcrumb-item active">{{ recette.titre }}</li>
+            </ol>
+        </nav>
+        <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+            <div>
+                <h1 class="h2">{{ recette.titre }}</h1>
+                <p class="text-muted small mb-0">
+                    {{ recette.dateCreation|time_ago }} — {{ difficulty_stars(recette.difficulte) }}
+                    — Prep. {{ recette.tempsPreparation|cooking_time_format }}
+                    {% if recette.tempsCuisson is not null %}
+                        — Cuisson {{ recette.tempsCuisson|cooking_time_format }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <form method="post" action="{{ path('app_recette_favorite', {id: recette.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('favorite' ~ recette.id) }}">
+                    <button class="btn btn-warning" type="submit">Ajouter aux favoris</button>
+                </form>
+                {% if is_granted('ROLE_CUISINIER') and app.user is not null and (is_granted('ROLE_ADMIN') or recette.auteur.id == app.user.id) %}
+                    <a class="btn btn-outline-primary" href="{{ path('app_ingredient_new', {id: recette.id}) }}">+ Ingrédient</a>
+                    <a class="btn btn-outline-secondary" href="{{ path('app_recette_edit', {id: recette.id}) }}">Modifier</a>
+                    <form method="post" action="{{ path('app_recette_delete', {id: recette.id}) }}" data-confirm="Supprimer cette recette ?">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recette.id) }}">
+                        <button class="btn btn-outline-danger">Supprimer</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if recette.imageName %}
+        <div class="mb-4">
+            <img src="{{ asset('uploads/recettes/' ~ recette.imageName) }}" alt="" class="img-fluid rounded shadow w-100 object-fit-cover" style="max-height:420px">
+        </div>
+    {% endif %}
+
+    <div class="mb-3">
+        {% if recette.tags|length %}
+            {% for t in recette.tags %}
+                <span class="badge me-1" style="background-color: {{ t.couleur }}">{{ t.nom }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-header fw-semibold">{{ recette.categorie.icone|default('') }} Ingrédients ({{ recette.nbPersonnes }} pers.)</div>
+                <ul class="list-group list-group-flush">
+                    {% for ing in recette.ingredients %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center gap-2">
+                            <span><strong>{{ ing.nom }}</strong> <span class="text-muted">{{ ing.quantite }}</span></span>
+                            {% if is_granted('ROLE_CUISINIER') and app.user is not null and (is_granted('ROLE_ADMIN') or recette.auteur.id == app.user.id) %}
+                                <form method="post" action="{{ path('app_ingredient_delete', {id: ing.id}) }}"
+                                      data-confirm="Retirer cet ingredient ?">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_ingredient' ~ ing.id) }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger py-0">Retirer</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li class="list-group-item text-muted">Pas encore d'ingredients.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-header fw-semibold">Instructions</div>
+                <div class="card-body">
+                    <p class="mb-3">{{ recette.description|nl2br }}</p>
+                    <hr>
+                    <div class="lh-lg">{{ recette.instructions|nl2br }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

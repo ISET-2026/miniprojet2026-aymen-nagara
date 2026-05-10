@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}RecipeHub{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('feane/images/favicon.png') }}" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="{{ asset('feane/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('feane/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('feane/css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/forms.css') }}" rel="stylesheet">
+    {% block styles %}{% endblock %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+</head>
+<body class="{% block body_class %}sub_page{% endblock %} d-flex flex-column min-vh-100">
+<div class="hero_area">
+    <div class="bg-box">
+        <img src="{{ asset('feane/images/hero-bg.jpg') }}" alt="">
+    </div>
+    <header class="header_section">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+                <a class="navbar-brand" href="{{ path('app_home') }}">
+                    <span>RecipeHub</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item{% if app.request.attributes.get('_route') == 'app_home' %} active{% endif %}">
+                            <a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                        </li>
+                        <li class="nav-item{% if app.request.attributes.get('_route') starts with 'app_recette_' %} active{% endif %}">
+                            <a class="nav-link" href="{{ path('app_recette_index') }}">Recettes</a>
+                        </li>
+                        {% if is_granted('ROLE_CUISINIER') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_recette_new') }}">Nouvelle recette</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_favoris_index') }}">
+                                Favoris{% set fc = favorite_recipes_count() %}{% if fc > 0 %} <span class="badge text-bg-warning ms-1">{{ fc }}</span>{% endif %}
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_categorie_index') }}">Categories</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_tag_index') }}">Tags</a></li>
+                        {% endif %}
+                    </ul>
+                    <div class="user_option">
+                        {% if app.user %}
+                            <span class="text-white me-3 small">{{ app.user.pseudo ?? app.user.userIdentifier }}</span>
+                            <a class="user_link" href="{{ path('app_logout') }}" aria-label="Deconnexion">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <a class="user_link" href="{{ path('app_login') }}" aria-label="Connexion">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </a>
+                            <a class="order_online" href="{{ path('app_register') }}">Inscription</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    {% block hero_content %}{% endblock %}
+</div>
+
+<main class="{% block main_class %}container layout_padding{% endblock %} flex-grow-1">
+    {% for label, msgs in app.flashes %}
+        {% for text in msgs %}
+            <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                {{ text }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% block body %}{% endblock %}
+</main>
+
+<footer class="footer_section bg-dark text-white py-4 mt-auto">
+    <div class="container small d-flex flex-column flex-md-row justify-content-between gap-2">
+        <span>RecipeHub &mdash; partage culinaire Symfony 7</span>
+        <span>{{ difficulty_stars('moyen') }} Recettes faciles a retrouver</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h2">Categories</h1>
+        <a class="btn btn-primary" href="{{ path('app_categorie_new') }}">Nouvelle categorie</a>
+    </div>
+
+    <div class="table-responsive card shadow-sm">
+        <table class="table table-striped mb-0">
+            <thead><tr><th>Icône</th><th>Nom</th><th>Description</th></tr></thead>
+            <tbody>
+            {% for c in categories %}
+                <tr>
+                    <td>{{ c.icone|default('') }}</td>
+                    <td>{{ c.nom }}</td>
+                    <td class="small text-muted">{% set d = c.description|default('') %}{{ d|length > 80 ? d|slice(0, 80) ~ '…' : d }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

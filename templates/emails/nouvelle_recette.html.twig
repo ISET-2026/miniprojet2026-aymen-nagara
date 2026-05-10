@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle recette</title>
+</head>
+<body style="font-family:system-ui,sans-serif;line-height:1.5">
+    <h1>Nouvelle recette publiée</h1>
+    <p><strong>{{ recette.titre }}</strong></p>
+    <ul>
+        <li>Catégorie : {{ recette.categorie.nom }}</li>
+        <li>Difficulté : {{ recette.difficulte }}</li>
+        <li>Temps total : {{ temps_total }} min</li>
+        <li>Auteur : {{ auteurPseudo }}</li>
+    </ul>
+    <p>{% set d = recette.description %}{{ d|length > 200 ? d|slice(0, 200) ~ '…' : d }}</p>
+</body>
+</html>

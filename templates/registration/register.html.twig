@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <section class="recipehub-form-shell auth-shell">
+        <div class="auth-card">
+            <div class="recipehub-form-header">
+                <span class="recipehub-kicker">RecipeHub</span>
+                <h1>Créer un compte</h1>
+                <p>Choisissez un profil et commencez à partager vos recettes.</p>
+            </div>
+
+            {% if form.vars.errors %}
+                <div class="form-alert error">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form, { attr: { class: 'recipehub-form grid-2' } }) }}
+
+                <div class="recipehub-field">
+                    {{ form_label(form.email, 'Email') }}
+                    {{ form_widget(form.email, { attr: { placeholder: 'votre.email@exemple.com' } }) }}
+                    {% if form.email.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.email) }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="recipehub-field">
+                    {{ form_label(form.pseudo, 'Pseudo') }}
+                    {{ form_widget(form.pseudo, { attr: { placeholder: 'Mon pseudo' } }) }}
+                    {% if form.pseudo.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.pseudo) }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="recipehub-field full-width">
+                    {{ form_label(form.accountType, 'Type de compte') }}
+                    {{ form_widget(form.accountType) }}
+                    {% if form.accountType.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.accountType) }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="recipehub-field full-width">
+                    {{ form_label(form.invitationCode, 'Code d\'invitation admin') }}
+                    {{ form_widget(form.invitationCode, { attr: { placeholder: 'Requis pour admin seulement' } }) }}
+                    {% if form.invitationCode.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.invitationCode) }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="recipehub-field">
+                    {{ form_label(form.plainPassword.first, 'Mot de passe') }}
+                    {{ form_widget(form.plainPassword.first, { attr: { placeholder: 'Minimum 6 caractères' } }) }}
+                    {% if form.plainPassword.first.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.plainPassword.first) }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="recipehub-field">
+                    {{ form_label(form.plainPassword.second, 'Confirmer mot de passe') }}
+                    {{ form_widget(form.plainPassword.second, { attr: { placeholder: 'Confirmez votre mot de passe' } }) }}
+                    {% if form.plainPassword.second.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.plainPassword.second) }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="grid-column: 1 / -1; margin-top: 16px;">
+                    {{ form_widget(form.submit, { label: 'Créer mon compte', attr: { class: 'recipehub-submit' } }) }}
+                </div>
+
+            {{ form_end(form) }}
+
+            <p class="recipehub-form-footer">
+                Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a>
+            </p>
+        </div>
+    </section>
+{% endblock %}

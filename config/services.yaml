@@ -1,0 +1,27 @@
+parameters:
+    upload_directory: '%kernel.project_dir%/public/uploads/recettes'
+    recipehub.notification_email: '%env(resolve:NOTIFICATION_EMAIL)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%upload_directory%'
+
+    App\EventSubscriber\DoctrineRecetteSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    App\EventSubscriber\RecettePublicationEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber }

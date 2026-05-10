@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if edition %}Modifier{% else %}Nouvelle{% endif %} recette{% endblock %}
+
+{% block body %}
+    <section class="recipe-shell">
+        <div class="recipe-card">
+            <div class="recipehub-form-header">
+                <span class="recipehub-kicker">RecipeHub</span>
+                <h1>{% if edition %}Modifier la recette{% else %}Nouvelle recette{% endif %}</h1>
+                <p>Renseignez les informations principales, puis ajoutez l'image et les tags.</p>
+            </div>
+
+            {{ form_start(form, { attr: { class: 'recipehub-form recipe-form' } }) }}
+
+                {# Row 1: Titre + Catégorie #}
+                <div class="form-row-title-cat">
+                    <div class="recipehub-field">
+                        {{ form_label(form.titre, 'Titre de la recette') }}
+                        {{ form_widget(form.titre, { attr: { placeholder: 'Ex: Tiramisu au café' } }) }}
+                        {% if form.titre.vars.errors %}
+                            <div class="form-error">{{ form_errors(form.titre) }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="recipehub-field">
+                        {{ form_label(form.categorie, 'Catégorie') }}
+                        {{ form_widget(form.categorie) }}
+                        {% if form.categorie.vars.errors %}
+                            <div class="form-error">{{ form_errors(form.categorie) }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Row 2: Description #}
+                <div class="recipehub-field">
+                    {{ form_label(form.description, 'Description') }}
+                    {{ form_widget(form.description, { attr: { placeholder: 'Décrivez votre recette...', rows: 4 } }) }}
+                    {% if form.description.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.description) }}</div>
+                    {% endif %}
+                </div>
+
+                {# Row 3: Instructions #}
+                <div class="recipehub-field">
+                    {{ form_label(form.instructions, 'Instructions') }}
+                    {{ form_widget(form.instructions, { attr: { placeholder: 'Étape par étape...', rows: 5 } }) }}
+                    {% if form.instructions.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.instructions) }}</div>
+                    {% endif %}
+                </div>
+
+                {# Row 4: Meta fields (4 equal columns) #}
+                <div class="form-row-meta">
+                    <div class="recipehub-field">
+                        {{ form_label(form.tempsPreparation, 'Temps préparation') }}
+                        {{ form_widget(form.tempsPreparation, { attr: { placeholder: 'en minutes' } }) }}
+                        {% if form.tempsPreparation.vars.errors %}
+                            <div class="form-error">{{ form_errors(form.tempsPreparation) }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="recipehub-field">
+                        {{ form_label(form.tempsCuisson, 'Temps cuisson') }}
+                        {{ form_widget(form.tempsCuisson, { attr: { placeholder: 'en minutes' } }) }}
+                        {% if form.tempsCuisson.vars.errors %}
+                            <div class="form-error">{{ form_errors(form.tempsCuisson) }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="recipehub-field">
+                        {{ form_label(form.difficulte, 'Difficulté') }}
+                        {{ form_widget(form.difficulte) }}
+                        {% if form.difficulte.vars.errors %}
+                            <div class="form-error">{{ form_errors(form.difficulte) }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="recipehub-field">
+                        {{ form_label(form.nbPersonnes, 'Nombre de personnes') }}
+                        {{ form_widget(form.nbPersonnes, { attr: { placeholder: '4' } }) }}
+                        {% if form.nbPersonnes.vars.errors %}
+                            <div class="form-error">{{ form_errors(form.nbPersonnes) }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Row 5: Publiée toggle #}
+                <div class="recipehub-field">
+                    <div class="form-check">
+                        {{ form_widget(form.publiee) }}
+                        <label for="{{ form.publiee.vars.id }}">Publier cette recette</label>
+                    </div>
+                </div>
+
+                {# Row 6: Tags #}
+                <div class="recipehub-field">
+                    {{ form_label(form.tags, 'Tags') }}
+                    <div class="form-tags-list">
+                        {% for tag in form.tags %}
+                            <label class="tag-pill">
+                                {{ form_widget(tag) }}
+                                <span class="tag-pill-label">{{ tag.vars.label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                    {% if form.tags.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.tags) }}</div>
+                    {% endif %}
+                </div>
+
+                {# Row 7: Image upload #}
+                <div class="recipehub-field">
+                    {{ form_label(form.imageFile, 'Image de la recette') }}
+                    <label class="form-image-dropzone">
+                        <div class="form-image-dropzone-icon">📸</div>
+                        <div class="form-image-dropzone-text">Choisir une image</div>
+                        <div class="form-image-dropzone-hint">ou la glisser-déposer ici</div>
+                        {{ form_widget(form.imageFile, { attr: { accept: 'image/*' } }) }}
+                    </label>
+                    {% if form.imageFile.vars.errors %}
+                        <div class="form-error">{{ form_errors(form.imageFile) }}</div>
+                    {% endif %}
+                </div>
+
+                <div style="margin-top: 28px;">
+                    {{ form_widget(form.submit, { label: 'Enregistrer la recette', attr: { class: 'recipehub-submit' } }) }}
+                </div>
+
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,31 @@
+### Symfony / PHP ###
+/vendor/
+/var/
+!/var/cache/.gitignore
+!/var/log/.gitignore
+!/public/uploads/recettes/.gitkeep
+/public/uploads/recettes/*
+!/public/uploads/recettes/.gitkeep
+
+### PHPUnit ###
+.phpunit.result.cache
+
+### Env ###
+/.env.local
+/.env.local.php
+/.env.*.local
+
+### Composer ###
+/auth.json
+
+### IDE / OS ###
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+### Node ###
+/node_modules/
+
+### Build ###
+/public/assets/

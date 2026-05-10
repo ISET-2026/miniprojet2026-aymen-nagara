@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle categorie{% endblock %}
+
+{% block body %}
+    <h1 class="h3 mb-3">Nouvelle categorie</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
